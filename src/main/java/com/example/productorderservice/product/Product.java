@@ -1,7 +1,5 @@
 package com.example.productorderservice.product;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +24,15 @@ class Product {
     private DiscountPolicy discountPolicy;
 
     public Product(String name, int price, DiscountPolicy discountPolicy) {
+        Assert.hasText(name, "상품명은 필수입니다.");
+        Assert.isTrue(price > 0, "상품 가격은 0원보다 커야 합니다.");
+        Assert.notNull(discountPolicy, "할인 정책은 필수입니다.");
+        this.name = name;
+        this.price = price;
+        this.discountPolicy = discountPolicy;
+    }
+
+    public void update(String name, int price, DiscountPolicy discountPolicy) {
         Assert.hasText(name, "상품명은 필수입니다.");
         Assert.isTrue(price > 0, "상품 가격은 0원보다 커야 합니다.");
         Assert.notNull(discountPolicy, "할인 정책은 필수입니다.");
