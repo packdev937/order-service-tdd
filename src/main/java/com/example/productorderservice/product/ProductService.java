@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,8 +39,10 @@ class ProductService {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/{productId}")
     @Transactional
-    public void updateProduct(Long productId, UpdateProductRequest request) {
+    public void updateProduct(@PathVariable Long productId,
+        @RequestBody UpdateProductRequest request) {
         final Product product = productPort.getProduct(productId);
         product.update(request.name(), request.price(), request.discountPolicy());
     }

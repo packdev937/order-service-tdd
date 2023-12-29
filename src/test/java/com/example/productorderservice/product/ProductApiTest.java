@@ -5,12 +5,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.example.productorderservice.ApiTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 public class ProductApiTest extends ApiTest {
 
-    private AddProductRequest request;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Test
     void 상품등록() {
@@ -29,6 +32,18 @@ public class ProductApiTest extends ApiTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("name")).isEqualTo("상품명");
+    }
+
+    @Test
+    void 상품수정() {
+        ProductSteps.상품등록요청(ProductSteps.상품등록요청_생성());
+        final Long productId = 1L;
+
+        ExtractableResponse<Response> response = ProductSteps.상품수정요청(productId);
+
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        Assertions.assertThat(productRepository.findById(productId).get().getName())
+            .isEqualTo("상품 수정");
     }
 
 }
